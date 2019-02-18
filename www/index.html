@@ -28,30 +28,36 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.min.css" />
+        <link rel="stylesheet" type="text/css" href="js/bootstrap-4.1.0-dist/css/bootstrap.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/web-fonts-with-css/css/fontawesome-all.min.css">
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <title>Hello World</title>
     </head>
     <body>
-        <div>
-            <h1>Laporan Perekonomian Indonesia APP</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+        <div id="mainApp" class="ac">
+            <div id="mainTitle">
+                <h1>Laporan<br/>Perekonomian<br/>Indonesia<br/>APP</h1>
             </div>
+            <div class="legend">Silahkan pilih tahun yang diinginkan</div>
+            <div class="customOption">
+                <select>
+                    <option value="2018">2018</option>
+                    <option value="2017">2017</option>
+                    <option value="2016">2016</option>
+                    <option value="2015">2015</option>
+                </select>
+            </div>
+            <div id="actionMain" class="mainBtn">Enter</div>
         </div>
-        <div class="customOption">
-            <select>
-                <option value="0">Pilih Tahun :</option>
-                <option value="1">2018</option>
-                <option value="2">2017</option>
-            </select>
-        </div>
-        <div id="actionMain" class="mainBtn">Enter</div>
+        
         <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap-4.1.0-dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </body>
 </html>
