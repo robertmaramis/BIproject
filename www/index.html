@@ -35,20 +35,33 @@
         <link rel="stylesheet" type="text/css" href="js/bootstrap-4.1.0-dist/css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/web-fonts-with-css/css/fontawesome-all.min.css">
         <link rel="stylesheet" type="text/css" href="css/index.css">
-        <title>Hello World</title>
+        <link rel="stylesheet" type="text/css" href="js/pdfJs/web/viewer.css">
+        <title>Bank Indonesia</title>
     </head>
     <body>
-        <div id="mainApp" class="ac">
-            <div id="mainTitle">
-                <h1>Laporan<br/>Perekonomian<br/>Indonesia<br/>APP</h1>
+        <div id="mainModal" class="modal fade" role="dialog"></div>
+        <div id="loadingModal" class="modal fade" role="dialog">
+                <div class="spinner modal-dialog">
+                    <img src="img/loading.svg"/>
+                </div>
+        </div>
+        
+        <div id="loginApp" data-role="page" class="ac">
+            <div id="mainLogo">
+                <img src='img/biLogoText.png' />
             </div>
-            <div class="legend">Silahkan pilih tahun yang diinginkan</div>
+            <div id="mainArt">
+                <img src='img/mainImageNew.png' />
+            </div>
+            <div id="mainTitle">
+                <h1>Laporan<br/>Perekonomian<br/>Indonesia</h1>
+            </div>
+            <div class="legend">Silakan pilih tahun yang diinginkan</div>
             <div class="customOption">
-                <select>
+                <select id="selectYear">
                     <option value="2018">2018</option>
                     <option value="2017">2017</option>
                     <option value="2016">2016</option>
-                    <option value="2015">2015</option>
                 </select>
             </div>
             <div id="actionMain" class="mainBtn">Enter</div>
@@ -58,6 +71,21 @@
         <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
         <script type="text/javascript" src="js/bootstrap-4.1.0-dist/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
+        <!-- <script type="text/javascript" src="js/pdfJs/build/pdf.js"></script> -->
+        <script type="text/javascript" src="js/pdfJs/build/pdf.js"></script>
+        <!-- <script type="text/javascript" src="js/pdfJs/build/pdf.js.map"></script> -->
+        <script type="text/javascript" src="js/pdfJs/build/pdf.worker.js"></script>
+        <!-- <script type="text/javascript" src="js/pdfJs/build/pdf.worker.js.map"></script> -->
+        <script type="text/javascript" src="js/pdfJs/web/viewer.js"></script>
+        <!-- <script type="text/javascript" src="js/pdfJs/web/viewer.js.map"></script> -->
+        <script type="text/javascript" src="js/properties.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript">
+            window.onerror = function(msg, url, linenumber) {
+                alert('Error message: '+msg+'\nURL: '+url+'\nLine Number: '+linenumber);
+                return true;
+            }   
+            
+        </script>
     </body>
 </html>
