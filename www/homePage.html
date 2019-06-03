@@ -38,16 +38,14 @@
                 <div id="prakataId">
 
                 </div>
-                <div class="author">
+                <!-- <div class="author">
                     Perry Warjiyo
                 </div>
                 <div class="jabatan">
                     Gubernur
-                </div>
+                </div> -->
 
-                <div id="readPrakata" class="smallBtn">
-                    Baca Lebih
-                </div>
+                <div id="readPrakata" data-url="" data-chapter=""  class="readMoreBtn smallBtn">Baca Lebih ></div>
             </div>
         </div>
         <div id="dewanGubernur" class="row insetSection">
@@ -106,7 +104,7 @@
             </ul>
             
             <div class="lpiLain">
-                <div class="box">LPI lainnya</div>
+                <div id="lpiLainTitle" class="box">LPI lainnya</div>
                 <ul id="listLpi">
                     
                 </ul>
@@ -123,10 +121,32 @@
                     </div>
                     <div id="goHighlight" class="ui-block-c">
                         <img src="img/highlightIcon.png" />
-                        <div>Highlights</div>
+                        <div>Saved Search</div>
                     </div>
                 </div>
+
+                <div class="box">
+                    <input type="text" id="globalSearch" value="" placeholder="Cari Kata Kunci Tersimpan" />
+                </div>
             </div>
+        </div>
+    </div>
+
+    <div id="searchGlobalOverlay" class="overlay fade">
+        <div class="mainOverlay">
+            <div id="searchOverlayTitle">
+                SEARCH
+            </div>
+            <div id="searchOverlayInput">
+                <form id="formGlobalSearch" onsubmit="return false;">
+                    <input type="text" id="globalOvrly" value="" placeholder="Cari Kata Kunci Tersimpan" />
+                </form>
+            </div>
+            <div id="globalSchOrlyBtn" class="fitBtn">
+                CARI >
+            </div>
+
+            <div id="globalClose"><i class="fa fa-2x fa-times"></i></div>
         </div>
     </div>
 

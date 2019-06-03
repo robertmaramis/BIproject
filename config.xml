@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.backstage.biProject" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Laporan BI</name>
+<widget id="com.backstage.biProject" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Laporan Perekonomian Indonesia</name>
     <description>
         Applikasi laporan tahunan BI
     </description>
@@ -12,6 +12,7 @@
     <preference name="orientation" value="portrait" />
     <preference name="target-device" value="universal" />
     <preference name="fullscreen" value="false" />
+    <preference name="BackgroundColor" value="0x01669B" />
     <preference name="webviewbounce" value="true" />
     <preference name="prerendered-icon" value="true" />
     <preference name="stay-in-webview" value="false" />
@@ -32,6 +33,11 @@
     <preference name="BackupWebStorage" value="local" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     <preference name="AndroidLaunchMode" value="singleInstance" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#01669B" />
+    <preference name="StatusBarStyle" value="blacktranslucent" />
+    <preference name="KeyboardResize" value="true" />
+    <preference name="KeyboardResizeMode" value="body" />
     <access origin="*" />
     <access origin="*://*.www.bi.go.id/*" subdomains="true" />
     <allow-intent href="http://*/*" />
@@ -54,5 +60,7 @@
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
+    <plugin name="cordova-plugin-statusbar" spec="https://github.com/apache/cordova-plugin-statusbar.git" />
     <engine name="android" spec="^7.1.4" />
+    <engine name="ios" spec="^4.5.5" />
 </widget>

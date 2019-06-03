@@ -38,7 +38,8 @@ var app = {
         }
         console.log(isApp);
         if(isApp){
-            defaultPdfUrl="js/pdfJs/web/viewer.html?file=file:///android_asset/www/pdf/";
+            //defaultPdfUrl="js/pdfJs/web/viewer.html?file=file:///android_asset/www/pdf/";
+            defaultPdfUrl="js/pdfJs/web/viewer.html?file=";
         } else {
             defaultPdfUrl="js/pdfJs/web/viewer.html?file=../../../pdf/";
         }
@@ -49,9 +50,23 @@ var app = {
 app.initialize();
 
 $(document).ready(function (event) {
-
     //getPdfData();
-    
+
+    if(device.platform == "iOS") {
+        $(document).on("focus","#globalOvrly",function(e){
+            e.preventDefault(); 
+            e.stopPropagation();
+            
+            $("#homePage").css("height",$(window).height()-$(window).height()/1.8+"px");
+        });
+    }
+
+    $(document).on("blur","#globalOvrly",function(e){
+        e.preventDefault(); 
+        e.stopPropagation();
+        $("#homePage").css("height","auto");
+    });
+
     var dWidth = $(document).width();
     var dHeight = $(document).height();
     console.log("WIDTH == " + dWidth);
@@ -85,39 +100,60 @@ $(document).ready(function (event) {
         
     });
 
-    // $(document).on("click","#mainImage",function(e){
-    //     e.stopPropagation();
-    //     e.stopImmediatePropagation();
-    //     var fileTransfer = new FileTransfer();
-    //     var uri = encodeURI("https://www.bi.go.id/id/publikasi/laporan-tahunan/perekonomian/Documents/1_LPI2017_COVER.pdf");
-    //     //var fileURL = "file:///storage/emulated/0/download/1_LPI2017_COVER.pdf";
-    //     var fileURL = cordova.file.dataDirectory + 'www/pdf/2017/1_LPI2017_COVER.pdf';
+    $(document).on("submit","#formGlobalSearch",function(e){
+        e.stopPropagation();
+        e.stopImmediatePropagation();
 
-    //     var finalUrl = "js/pdfJs/web/viewer.html?file="+cordova.file.dataDirectory + 'www/pdf/2017/1_LPI2017_COVER.pdf';
+        var keyVal = $("#globalOvrly").val();
+        if(keyVal == "") {
+            showAlert("Kata pencarian tidak boleh kosong");
+            return false;
+        }
+
+        globalSearchKeyword=keyVal;
+        $.mobile.changePage("searchResult.html",{transition: "slide",reloadPage: true});
+    });
+    $(document).on("click","#globalSchOrlyBtn",function(e){
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
+        var keyVal = $("#globalOvrly").val();
+        if(keyVal == "") {
+            showAlert("Kata pencarian tidak boleh kosong");
+            return false;
+        }
+
+        globalSearchKeyword=keyVal;
+        $.mobile.changePage("searchResult.html",{transition: "slide",reloadPage: true});
+    });
+
+    $(document).on("click","#globalSearch",function(e){
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        $("#menuContainer").removeClass("on");
+        $("#searchGlobalOverlay").addClass("on");
+
+        setTimeout(function(){
+            $("#globalOvrly").focus();
+        },500);
+    });
+
+    $(document).on("click","#globalClose",function(e){
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        $("#searchGlobalOverlay").removeClass("on");
+    });
+
+    $(document).on("click","#mainImage",function(e){
+        e.stopPropagation();
+        e.stopImmediatePropagation();
         
-    //     console.log(uri);
-
-    //     fileTransfer.download(
-    //         uri,
-    //         fileURL,
-    //         function(entry) {
-    //             alert("DOWNLOAD COMP");
-    //             console.log("download complete: " + entry.toURL());
-    //         },
-    //         function(error) {
-    //             alert("DOWNLOAD FAIL");
-    //             console.log("download error source " + error.source);
-    //             console.log("download error target " + error.target);
-    //             console.log("download error code " + error.code);
-    //         },
-    //         false,
-    //         {
-    //             headers: {
-    //                 "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
-    //             }
-    //         }
-    //     );
-    // });
+        gettext("https://cdn.mozilla.net/pdfjs/tracemonkey.pdf").then(function (text) {
+            alert('parse ' + text);
+        }, function (reason) {
+            console.error(reason);
+        });
+    });
 
     $(document).on("click",".changeLPI",function(e){
         e.stopPropagation();
@@ -138,6 +174,12 @@ $(document).ready(function (event) {
         console.log(triggerCreate);
         $.mobile.changePage("homePage.html",{transition: "flip",reloadPage: true});
     });
+
+    // $(document).on("click","#searchBookmarkOverlay",function(e){
+    //     e.stopPropagation();
+    //     e.stopImmediatePropagation();
+    //     $("#searchBookmarkOverlay").removeClass("on");
+    // });
     
     $(document).on("pageinit","#homePage",function(e){
         var dWidth = $(document).width();
@@ -182,6 +224,8 @@ $(document).ready(function (event) {
         } else {
             $("#prakataDwn").show();
             $("#dewanGubernur").show();
+            $("#readPrakata").attr("data-url",pdfLink[selectedYear].prakataLink);
+            $("#readPrakata").attr("data-chapter","Prakata");
         }
         
         $("#prakataId").html(pdfLink[selectedYear].prakata);
@@ -199,7 +243,7 @@ $(document).ready(function (event) {
                         '    <div id="collapse'+i+'" class="collapse" aria-labelledby="headingOne" data-parent="#mainContent">'+
                         '    <div class="card-body">'+
                                 pdfObj[i].desc+
-                        '        <div id="readPdf" data-url="'+pdfObj[i].link+'" data-chapter="'+pdfObj[i].title+'"  class="readMoreBtn">Readmore ></div>'+
+                        '        <div id="readPdf" data-url="'+pdfObj[i].link+'" data-chapter="'+pdfObj[i].title+'"  class="readMoreBtn smallBtn">Baca lebih ></div>'+
                         '    </div>'+
                         '    </div>'+
                         '</div>';
@@ -229,10 +273,7 @@ $(document).ready(function (event) {
         var restHtml = "";
 
         if(bookmarkJson != null && bookmarkJson != undefined){
-            console.log(selectedYear);
-
             var obj = bookmarkJson[selectedYear];
-            console.log(obj);
             
             if(obj != undefined){
                 for(var i=0;i<obj.length;i++){
@@ -244,11 +285,22 @@ $(document).ready(function (event) {
                                 '<div>'+
                                 '</li>';
                 }
+
+                $("#bookmarkList").html(restHtml);
+
+                $('#pagination-container').pagination({
+                    dataSource: obj,
+                    callback: function(data, pagination) {
+                        // template method of yourself
+                        var html = renderBookmark(data);
+                        $("#bookmarkList").html(html);
+                    }
+                });
             }
         } else {
             restHtml += '<div id="bookmarkEmpty>Tidak ada bookmark</div>';
+            $("#bookmarkList").html(restHtml);
         }
-        $("#bookmarkList").html(restHtml);
         
         $(document).on("click",".deleteBookmark",function(e){
             e.stopPropagation();
@@ -281,6 +333,12 @@ $(document).ready(function (event) {
             $(this).parent().parent().remove();
         });
 
+        $(document).on("click","#bkSearch",function(e){
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            $("#searchBookmarkOverlay").addClass("on");
+        });
+
         $(document).on("click",".goToDetail",function(e){
             e.stopPropagation();
             e.stopImmediatePropagation();
@@ -289,6 +347,105 @@ $(document).ready(function (event) {
             selectedChapter = $(this).attr("data-chap");
             $.mobile.changePage("homePage.html",{transition: "flip"});
         });
+
+        $(document).on("click","#schOrlyBtn",function(e){
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            var key = $("#schOvrly").val();
+            if(key =="") {
+                showAlert("Kata Pencarian tidak boleh kosong");
+                return false;
+            }
+
+            reRenderBookmark(key);
+
+        });
+    });
+
+    $(document).on("pageshow","#searchResultPage",function(e){
+        var dHeight = $(window).height();
+        $("#searchResultPage .content").css("min-height",dHeight+"px");
+        $("#searchResTagLine").html("LPI " + selectedYear);
+    });
+
+    $(document).on("pageinit","#searchResultPage",function(e){
+        var dHeight = $(window).height();
+        $("#searchResultPage .content").css("min-height",dHeight+"px");
+        $("#searchResTagLine").html("LPI " + selectedYear);
+
+        generateSideBar("searchResultPage");
+        console.log(globalSearchKeyword);
+        $(".keyword").html('"' + globalSearchKeyword + '"');
+        
+        var bookmarkJson = JSON.parse(window.localStorage.getItem("bookmark"));
+        var notesJson = JSON.parse(window.localStorage.getItem("notes"));
+        var highlightJson = JSON.parse(window.localStorage.getItem("highlight"));
+
+        var restHtml = "";
+        
+        if(bookmarkJson != null && bookmarkJson != undefined){
+            var obj = bookmarkJson[selectedYear];
+            if(obj != undefined){
+                for(var i=0;i<obj.length;i++){
+                    var checkStr = obj[i].title + " " +obj[i].chapter;
+                    
+                    if(checkStr.toLowerCase().search(globalSearchKeyword.toLowerCase()) > -1){
+                        restHtml += '<li class="bookmarkList clearfix">'+
+                                '<div class="bkTitle">Bookmark</div>'+
+                                '<div class="bkTitle">'+obj[i].title+'<br/>'+obj[i].chapter+'</div>'+
+                                '<div class="actionBookmark">'+
+                                '<div class="deleteBookmark" data-idx="'+i+'" data-page="'+obj[i].page+'"><img src="img/deleteIcon.png" /></div>'+
+                                '<div class="goToDetail" data-url="'+obj[i].url+'" data-chap="'+obj[i].chapter+'"><img src="img/goToIcon.png" /></div>'+
+                                '<div>'+
+                                '</li>';
+                    }
+                }
+            }
+        }
+
+        if(notesJson != null && notesJson != undefined){
+            var obj = notesJson[selectedYear];
+
+            if(obj != undefined){
+                for(var i=0;i<obj.length;i++){
+                    var checkStr = obj[i].title + " " +obj[i].notes;
+                    
+                    if(checkStr.toLowerCase().search(globalSearchKeyword.toLowerCase()) > -1){
+
+                        restHtml += '<li class="notesList clearfix">'+
+                                    '<div class="bkTitle">Notes</div>'+
+                                    '<div class="bkTitle">'+obj[i].title+'<br/><span>'+obj[i].notes+'</span></div>'+
+                                    '<div class="actionBookmark">'+
+                                    '<div class="deleteNotes" data-idx="'+i+'" data-page="'+obj[i].page+'"><img src="img/deleteIcon.png" /></div>'+
+                                    '<div class="goToDetail" data-url="'+obj[i].url+'" ><img src="img/goToIcon.png" /></div>'+
+                                    '<div>'+
+                                    '</li>';
+                    }
+                }
+            }
+        }
+
+        if(highlightJson != null && highlightJson != undefined){
+            var obj = highlightJson[selectedYear];
+
+            if(obj != undefined){
+                for(var i=0;i<obj.length;i++){
+                    var checkStr = obj[i].title + " " +obj[i].text;
+                    
+                    if(checkStr.toLowerCase().search(globalSearchKeyword.toLowerCase()) > -1){
+                        restHtml += '<li class="highlightList clearfix">'+
+                                    '<div class="bkTitle">Highlight</div>'+
+                                    '<div class="bkTitle">'+obj[i].title+'<br/><span>'+obj[i].text+'</span></div>'+
+                                    '<div class="actionBookmark">'+
+                                    '<div class="deleteHighligh" data-idx="'+i+'" data-page="'+obj[i].page+'"><img src="img/deleteIcon.png" /></div>'+
+                                    '<div class="goToHighlight" data-url="'+obj[i].url+'" data-hText="'+obj[i].text+'"><img src="img/goToIcon.png" /></div>'+
+                                    '<div>'+
+                                    '</li>';
+                    }
+                }
+            }
+        }
+        $("#searchResultList").html(restHtml);
     });
 
     $(document).on("pageinit","#notesPage",function(e){
@@ -300,14 +457,12 @@ $(document).ready(function (event) {
         //$("#notesPage #overlayConent").css("height",dHeight-160 + "px");
 
         var notesJson = JSON.parse(window.localStorage.getItem("notes"));
-        console.log(notesJson);
+        
         var restHtml = "";
 
         if(notesJson != null && notesJson != undefined){
-            console.log(selectedYear);
-
             var obj = notesJson[selectedYear];
-            console.log(obj);
+            
             if(obj != undefined){
                 for(var i=0;i<obj.length;i++){
                     restHtml += '<li class="notesList clearfix">'+
@@ -318,11 +473,23 @@ $(document).ready(function (event) {
                                 '<div>'+
                                 '</li>';
                 }
+
+                $("#notesList").html(restHtml);
+
+                $('#pagination-container-nts').pagination({
+                    dataSource: obj,
+                    callback: function(data, pagination) {
+                        // template method of yourself
+                        var html = renderNotes(data);
+                        $("#notesList").html(html);
+                    }
+                });
             }
         } else {
             restHtml += '<div id="bookmarkEmpty>Tidak ada bookmark</div>';
+            $("#notesList").html(restHtml);
         }
-        $("#notesList").html(restHtml);
+        
 
         $(document).on("click",".deleteNotes",function(e){
             e.stopPropagation();
@@ -395,6 +562,24 @@ $(document).ready(function (event) {
             
             $("#notesPage").val("");
         });
+
+        $(document).on("click","#ntsSearch",function(e){
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            $("#searchBookmarkOverlay").addClass("on");
+        });
+
+        $(document).on("click","#schNtsOrlyBtn",function(e){
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            var key = $("#schNtsOvrly").val();
+            if(key =="") {
+                showAlert("Kata Pencarian tidak boleh kosong");
+                return false;
+            }
+
+            reRenderNotes(key);
+        });
     });
 
     $(document).on("pageinit","#highlightPage",function(e){
@@ -406,14 +591,12 @@ $(document).ready(function (event) {
         //$("#highlightPage #overlayConent").css("height",dHeight-160 + "px");
 
         var notesJson = JSON.parse(window.localStorage.getItem("highlight"));
-        console.log(notesJson);
+        
         var restHtml = "";
 
         if(notesJson != null && notesJson != undefined){
-            console.log(selectedYear);
-
             var obj = notesJson[selectedYear];
-            console.log(obj);
+            
             if(obj != undefined){
                 for(var i=0;i<obj.length;i++){
                     restHtml += '<li class="highlightList clearfix">'+
@@ -424,11 +607,21 @@ $(document).ready(function (event) {
                                 '<div>'+
                                 '</li>';
                 }
+                $("#highlightList").html(restHtml);
+
+                $('#pagination-container-high').pagination({
+                    dataSource: obj,
+                    callback: function(data, pagination) {
+                        // template method of yourself
+                        var html = renderHigh(data);
+                        $("#highlightList").html(html);
+                    }
+                });
             }
         } else {
             restHtml += '<div id="bookmarkEmpty>Tidak ada highlight</div>';
+            $("#highlightList").html(restHtml);
         }
-        $("#highlightList").html(restHtml);
 
         $(document).on("click",".deleteHighligh",function(e){
             e.stopPropagation();
@@ -470,6 +663,25 @@ $(document).ready(function (event) {
             highlightRender = "Y";        
             $.mobile.changePage("homePage.html",{transition: "flip"});
         });
+
+        $(document).on("click","#highSearch",function(e){
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            $("#searchBookmarkOverlay").addClass("on");
+        });
+
+        $(document).on("click","#schHighOrlyBtn",function(e){
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            var key = $("#schHighOvrly").val();
+            if(key =="") {
+                showAlert("Kata Pencarian tidak boleh kosong");
+                return false;
+            }
+
+            reRenderHighlight(key);
+
+        });
     });
 
     $(document).on("click",".collapseTitle",function(e){
@@ -483,18 +695,22 @@ $(document).ready(function (event) {
         }
     });
 
-    $(document).on("click","#readPdf",function(e){
+    $(document).on("click","#readPdf, #readPrakata",function(e){
         e.stopPropagation();
         e.stopImmediatePropagation();
         
-        //var url='file:///android_asset/www/pdf/1_LPI2017_COVER.pdf';
+        // var url =$(this).attr("data-url");
+        // selectedChapter = $(this).attr("data-chapter");
+        // var finalUrl = defaultPdfUrl+selectedYear+"/"+url;
+        // $("#pdfImage").attr("src",finalUrl);
+
         var url =$(this).attr("data-url");
         selectedChapter = $(this).attr("data-chapter");
-        var finalUrl = defaultPdfUrl+selectedYear+"/"+url;
+        var finalUrl = "js/pdfJs/web/viewer.html?file="+url;
         console.log(finalUrl);
-        //PDFView.open(url, 0);
 
         $("#pdfImage").attr("src",finalUrl);
+
         $(".pdfTitle").html("LPI " + selectedYear);
         
         $("#pdfContainer").addClass("on");
@@ -504,9 +720,14 @@ $(document).ready(function (event) {
     $(document).on("click",".sideBarPdf",function(e){
         e.stopPropagation();
         e.stopImmediatePropagation();
+        // var url =$(this).attr("data-url");
+        // selectedChapter = $(this).attr("data-chapter");
+        // var finalUrl = defaultPdfUrl+selectedYear+"/"+url;
+        
         var url =$(this).attr("data-url");
         selectedChapter = $(this).attr("data-chapter");
-        var finalUrl = defaultPdfUrl+selectedYear+"/"+url;
+        var finalUrl = "js/pdfJs/web/viewer.html?file="+url;
+
         console.log(finalUrl);
 
         $("#pdfImage").attr("src",finalUrl);
@@ -592,7 +813,7 @@ $(document).ready(function (event) {
 
         var pageNum = innerDoc.getElementById("pageNumber").value;
 
-        var index = bkArr.findIndex(x => x.page==pageNum);
+        var index = bkArr.findIndex(x => x.idx==pageNum+"-"+selectedChapter);
         console.log(index);
 
         if(index > -1) {
@@ -656,7 +877,9 @@ $(document).ready(function (event) {
             "page" : pageNum,
             "url"  : pdfUrl+""+url,
             "notes" : notesPage,
-            "title" : "pg. " + pageNum
+            "chapter" : selectedChapter,
+            "title" : "pg. " + pageNum,
+            "idx" : pageNum+"-"+selectedChapter 
         }
 
         var noteObj = JSON.parse(window.localStorage.getItem("notes"));
@@ -685,16 +908,6 @@ $(document).ready(function (event) {
     });
     
 });
-
-// search with PDF.js
-function searchPDF(td_text) {
-    PDFViewerApplication.findBar.open();
-    PDFViewerApplication.findBar.findField.value = td_text;
-    PDFViewerApplication.findBar.caseSensitive.checked = true;
-    PDFViewerApplication.findBar.highlightAll.checked = true;
-    PDFViewerApplication.findBar.findNextButton.click();
-    PDFViewerApplication.findBar.close();
-}
 
 function listDir(path){
     window.resolveLocalFileSystemURL(path,
@@ -729,6 +942,7 @@ function setBookmark(el){
         "page" : urlParams.get("page"),
         "url"  : el.href,
         "chapter" : selectedChapter,
+        "selectedYear" : selectedYear,
         "title" : "pg. " + urlParams.get("page")
     }
 
@@ -749,15 +963,48 @@ function setBookmark(el){
     bkObj[selectedYear] = bkArr;
 
     console.log(bkObj);
-    // console.log("/"+urlParams.get("file"));
-    // gettext("").then(function (text) {
-    //     alert('parse ' + text);
-    // }, function (reason) {
-    //     console.error(reason);
-    // });
     
     showAlert("Bookmark telah ditambahkan");
     window.localStorage.setItem("bookmark",JSON.stringify(bkObj));
+
+    // var excerpt = "";
+
+    // gettext(el.href,urlParams.get("page")).then(function (text) {
+    //     if(text != undefined && text != "") {
+    //         excerpt = text;
+
+    //         var bookmarkObj = {
+    //             "page" : urlParams.get("page"),
+    //             "url"  : el.href,
+    //             "chapter" : selectedChapter,
+    //             "title" : "pg. " + urlParams.get("page") + " " +excerpt
+    //         }
+        
+    //         var bkObj = JSON.parse(window.localStorage.getItem("bookmark"));
+    //         var bkArr = [];
+        
+    //         if(bkObj != null) {
+    //             if(bkObj[selectedYear] == null){
+    //                 bkObj[selectedYear] = [];
+    //             } else {
+    //                 bkArr = bkObj[selectedYear];
+    //             }
+    //         } else {
+    //             bkObj = {};
+    //         }
+            
+    //         bkArr.push(bookmarkObj);
+    //         bkObj[selectedYear] = bkArr;
+        
+    //         console.log(bkObj);
+            
+    //         showAlert("Bookmark telah ditambahkan");
+    //         window.localStorage.setItem("bookmark",JSON.stringify(bkObj));
+    //     }
+    // }, function (reason) {
+    //     console.error(reason);
+    // });
+
 }
 
 function showAlert(content) {
@@ -783,7 +1030,7 @@ function generateSideBar(target){
     var restHtml="";
 
     for(var i=0;i<pdfObj.length;i++) {
-        restHtml +='<li class="sideBarPdf" data-url="'+pdfObj[i].link+'" data-chapter="'+pdfObj[i].title+'">'+
+        restHtml +='<li class="sideBarPdf '+pdfObj[i].class+'" data-url="'+pdfObj[i].link+'" data-chapter="'+pdfObj[i].title+'">'+
                         pdfObj[i].title+
                     '</li>';
     }
@@ -847,28 +1094,34 @@ function saveHighlights(){
     window.localStorage.setItem("highlight",JSON.stringify(bkObj));   
 }
 
-function gettext(pdfUrl){
-    var pdf = pdfjsLib.getDocument(pdfUrl);
-    return pdf.then(function(pdf) { // get all pages text
-        var maxPages = pdf.pdfInfo.numPages;
+function gettext(pdfUrl,pgNum){
+    // If absolute URL from the remote server is provided, configure the CORS
+    // header on that server.
+    var url = pdfUrl;
+    var finalText = "";
+
+    // Asynchronous download of PDF
+    //var loadingTask = pdfjsLib.getDocument(url);
+    //loadingTask.promise.then(function(pdf) {
+    var pdf = pdfjsLib.getDocument(url);
+    return pdf.then(function(pdf) {
+        
         var countPromises = []; // collecting all page promises
-        for (var j = 1; j <= maxPages; j++) {
-            var page = pdf.getPage(j);
-    
-            var txt = "";
-            countPromises.push(page.then(function(page) { // add page promise
-                var textContent = page.getTextContent();
-                return textContent.then(function(text){ // return content promise
-                    return text.items.map(function (s) { return s.str; }).join(''); // value page text 
-    
-                });
-            }));
-        }
-         
+        countPromises.push(pdf.getPage(pgNum).then(function(page) {
+            
+            var textContent = page.getTextContent();
+            
+            return textContent.then(function(text){ // return content promise
+                return text.items.map(function (s) { console.log(s.str); return s.str; }).join(''); // value page text 
+            });
+        }));
         // Wait for all pages and join text
         return Promise.all(countPromises).then(function (texts) {
-           return texts.join('');
+            return texts.join('');
         });
+    }, function (reason) {
+        // PDF loading error
+        console.error(reason);
     });
 }
 
@@ -938,7 +1191,7 @@ function generateHome(){
                         '    <div id="collapse'+i+'" class="collapse" aria-labelledby="headingOne" data-parent="#mainContent">'+
                         '    <div class="card-body">'+
                                 pdfObj[i].desc+
-                        '        <div id="readPdf" data-url="'+pdfObj[i].link+'" data-chapter="'+pdfObj[i].title+'"  class="readMoreBtn">Readmore ></div>'+
+                        '        <div id="readPdf" data-url="'+pdfObj[i].link+'" data-chapter="'+pdfObj[i].title+'"  class="readMoreBtn smallBtn">Baca lebih ></div>'+
                         '    </div>'+
                         '    </div>'+
                         '</div>';
@@ -1009,12 +1262,184 @@ function checkBookmark(pgNm){
         
     if(bookmarkJson != null && bookmarkJson != undefined){
         var obj = bookmarkJson[selectedYear];
+        console.log(obj.length);
         for(var i=0;i<obj.length;i++){
-            if(obj[i].page == pgNm && obj[i].chapter == selectedChapter){
+            console.log(pgNm + " " + selectedChapter+ " " + selectedYear);
+            console.log(obj[i].page + " " + obj[i].chapter + " " +obj[i].selectedYear);
+            if(obj[i].page == pgNm && obj[i].chapter == selectedChapter && obj[i].selectedYear == selectedYear){
                 return true;
-            } else {
-                return false;
             }
+        }
+    }
+}
+
+function renderBookmark(obj) {
+    var restHtml="";
+    for(var i=0;i<obj.length;i++){
+        restHtml += '<li class="bookmarkList clearfix">'+
+                    '<div class="bkTitle">'+obj[i].title+'<br/>'+obj[i].chapter+'</div>'+
+                    '<div class="actionBookmark">'+
+                    '<div class="deleteBookmark" data-idx="'+i+'" data-page="'+obj[i].page+'"><img src="img/deleteIcon.png" /></div>'+
+                    '<div class="goToDetail" data-url="'+obj[i].url+'" data-chap="'+obj[i].chapter+'"><img src="img/goToIcon.png" /></div>'+
+                    '<div>'+
+                    '</li>';
+    }
+    return restHtml;
+}
+
+function reRenderBookmark(key) {
+    var restHtml = "";
+
+    var bookmarkJson = JSON.parse(window.localStorage.getItem("bookmark"));
+        
+    if(bookmarkJson != null && bookmarkJson != undefined){
+        
+        var obj = bookmarkJson[selectedYear];
+        var dataSource = [];
+
+        if(obj != undefined){
+            for(var i=0;i<obj.length;i++){
+                var checkStr = obj[i].title + " " +obj[i].chapter;
+                
+                if(checkStr.toLowerCase().search(key.toLowerCase()) > -1){
+                    dataSource.push(obj[i]);
+
+                    restHtml += '<li class="bookmarkList clearfix">'+
+                            '<div class="bkTitle">'+obj[i].title+'<br/>'+obj[i].chapter+'</div>'+
+                            '<div class="actionBookmark">'+
+                            '<div class="deleteBookmark" data-idx="'+i+'" data-page="'+obj[i].page+'"><img src="img/deleteIcon.png" /></div>'+
+                            '<div class="goToDetail" data-url="'+obj[i].url+'" data-chap="'+obj[i].chapter+'"><img src="img/goToIcon.png" /></div>'+
+                            '<div>'+
+                            '</li>';
+                }
+            }
+
+            $("#bookmarkList").html(restHtml);
+            
+            $('#pagination-container').pagination({
+                dataSource: dataSource,
+                callback: function(data, pagination) {
+                    // template method of yourself
+                    var html = renderBookmark(data);
+                    $("#bookmarkList").html(html);
+                }
+            });  
+            
+            $("#searchBookmarkOverlay").removeClass("on");
+        }
+    }
+}
+
+function renderNotes(obj) {
+    var restHtml="";
+    for(var i=0;i<obj.length;i++){
+        restHtml += '<li class="notesList clearfix">'+
+                        '<div class="bkTitle">'+obj[i].title+'<br/><span>'+obj[i].notes+'</span></div>'+
+                        '<div class="actionBookmark">'+
+                        '<div class="deleteNotes" data-idx="'+i+'" data-page="'+obj[i].page+'"><img src="img/deleteIcon.png" /></div>'+
+                        '<div class="goToDetail" data-url="'+obj[i].url+'" ><img src="img/goToIcon.png" /></div>'+
+                        '<div>'+
+                        '</li>';
+    }
+    return restHtml;
+}
+
+function reRenderNotes(key) {
+    var restHtml = "";
+
+    var notesJson = JSON.parse(window.localStorage.getItem("notes"));
+        
+    if(notesJson != null && notesJson != undefined){
+        
+        var obj = notesJson[selectedYear];
+        var dataSource = [];
+
+        if(obj != undefined){
+            for(var i=0;i<obj.length;i++){
+                var checkStr = obj[i].title + " " +obj[i].notes;
+                
+                if(checkStr.toLowerCase().search(key.toLowerCase()) > -1){
+                    dataSource.push(obj[i]);
+
+                    restHtml += '<li class="notesList clearfix">'+
+                                '<div class="bkTitle">'+obj[i].title+'<br/><span>'+obj[i].notes+'</span></div>'+
+                                '<div class="actionBookmark">'+
+                                '<div class="deleteNotes" data-idx="'+i+'" data-page="'+obj[i].page+'"><img src="img/deleteIcon.png" /></div>'+
+                                '<div class="goToDetail" data-url="'+obj[i].url+'" ><img src="img/goToIcon.png" /></div>'+
+                                '<div>'+
+                                '</li>';
+                }
+            }
+
+            $("#notesList").html(restHtml);
+            
+            $('#pagination-container-nts').pagination({
+                dataSource: dataSource,
+                callback: function(data, pagination) {
+                    // template method of yourself
+                    var html = renderNotes(data);
+                    $("#notesList").html(html);
+                }
+            });  
+            
+            $("#searchBookmarkOverlay").removeClass("on");
+        }
+    }
+}
+
+function renderHigh(obj){
+    var restHtml="";
+    for(var i=0;i<obj.length;i++){
+        restHtml += '<li class="highlightList clearfix">'+
+                        '<div class="bkTitle">'+obj[i].title+'<br/><span>'+obj[i].text+'</span></div>'+
+                        '<div class="actionBookmark">'+
+                        '<div class="deleteHighligh" data-idx="'+i+'" data-page="'+obj[i].page+'"><img src="img/deleteIcon.png" /></div>'+
+                        '<div class="goToHighlight" data-url="'+obj[i].url+'" data-hText="'+obj[i].text+'"><img src="img/goToIcon.png" /></div>'+
+                        '<div>'+
+                        '</li>';
+    }
+    return restHtml;
+}
+
+function reRenderHighlight(key){
+    var restHtml = "";
+
+    var notesJson = JSON.parse(window.localStorage.getItem("highlight"));
+        
+    if(notesJson != null && notesJson != undefined){
+        
+        var obj = notesJson[selectedYear];
+        var dataSource = [];
+
+        if(obj != undefined){
+            for(var i=0;i<obj.length;i++){
+                var checkStr = obj[i].title + " " +obj[i].text;
+                
+                if(checkStr.toLowerCase().search(key.toLowerCase()) > -1){
+                    dataSource.push(obj[i]);
+
+                    restHtml += '<li class="highlightList clearfix">'+
+                                '<div class="bkTitle">'+obj[i].title+'<br/><span>'+obj[i].text+'</span></div>'+
+                                '<div class="actionBookmark">'+
+                                '<div class="deleteHighligh" data-idx="'+i+'" data-page="'+obj[i].page+'"><img src="img/deleteIcon.png" /></div>'+
+                                '<div class="goToHighlight" data-url="'+obj[i].url+'" data-hText="'+obj[i].text+'"><img src="img/goToIcon.png" /></div>'+
+                                '<div>'+
+                                '</li>';
+                }
+            }
+
+            $("#highlightList").html(restHtml);
+            
+            $('#pagination-container-high').pagination({
+                dataSource: dataSource,
+                callback: function(data, pagination) {
+                    // template method of yourself
+                    var html = renderHigh(data);
+                    $("#highlightList").html(restHtml);
+                }
+            });  
+            
+            $("#searchBookmarkOverlay").removeClass("on");
         }
     }
 }

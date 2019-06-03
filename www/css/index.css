@@ -131,6 +131,7 @@ h1 {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b11116', endColorstr='#a20f11',GradientType=0 ); /* IE6-9 */
 }
 
+
 #mainLogo {
     width: 40%;
     margin: 50px auto 0px;
@@ -152,6 +153,10 @@ h1 {
 #mainTitle h1 {
     text-align: center;
     text-transform: uppercase;
+}
+
+.ui-mobile .ui-page{
+    top: -1px;
 }
 
 .ui-overlay-a, .ui-page-theme-a, .ui-page-theme-a .ui-panel-wrapper {
@@ -228,10 +233,11 @@ h1 {
 #tagLine,
 #bkTagLine,
 #notesTagLine,
-#highlightTagLine {
+#highlightTagLine,
+#searchResTagLine {
     padding: 10px;
     font-size: 1.3em;
-    font-weight: lighter;
+    font-weight: bold;
 }
 
 img {
@@ -309,13 +315,15 @@ ul li {
 }
 
 #laporanTitle {
-    font-size: 1.8em;
-    width: 80%;
+    font-size: 2.3em;
+    width: 90%;
     margin: 0 auto;
     padding: 10px 15px;
     background: #F1F1F1;
     border-left: 3px solid #0366A2;
     color:#3D3D3D;
+    text-transform: uppercase;
+    line-height: normal;
 }
 
 .card {
@@ -336,8 +344,9 @@ ul li {
 }
 
 .collapseTitle {
-    padding: 15px 0px;
-    font-size: 1.3em;
+    padding: 15px 25px 15px 0px;
+    font-size: 1.7em;
+    text-align: left;
 }
 
 .whiteBack {
@@ -394,6 +403,14 @@ ul li {
     top: -180%;
 }
 
+.overlay.fade {
+    right: 0px;
+    top: 0px;
+    opacity: 0;
+    display: none;
+    transition:all 1s linear;
+}
+
 .overlay.on{
     right: 0%;
 }
@@ -401,6 +418,14 @@ ul li {
 .overlay.on.top {
     right: 0px;
     top: 0%;
+}
+
+.overlay.fade.on {
+    right: 0px;
+    top: 0px;
+    opacity: 1;
+    display: block;
+    transition:all 1s linear;
 }
 
 #pdfImage {
@@ -462,6 +487,9 @@ ul li {
 
 #overlayTitles {
     font-size: 2em;
+    color: #BE956D;
+    text-align: center;
+    font-weight: bold;
     padding: 10px;
 }
 
@@ -477,14 +505,11 @@ ul li {
 }
 
 #overlayFooter {
-    /* position: absolute;
-    width: 100%;
-    bottom: 15px;
-    left: 0; */
+    padding: 20px 0px 10px;
 }
 
 #overlayFooter img {
-    width: 50px;
+    width: 65px;
 }
 
 #pdfHeaderOverlay {
@@ -498,7 +523,8 @@ ul li {
 }
 
 .pdfTitle {
-    font-size: 1.4em;
+    font-size: 1.8em;
+    font-weight: bold;
 }
 
 #documentFooter {
@@ -586,7 +612,8 @@ ul li {
 }
 
 #prakata {
-    padding-top: 125px;
+    padding-top: 104px;
+    font-size: 2em;
 }
 
 #mainGub {
@@ -610,8 +637,25 @@ ul li {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b11116', endColorstr='#a20f11',GradientType=0 );
 }
 
+.fitBtn {
+    color: #FFFFFF;
+    background: #332929;
+    text-align: center;
+    padding: 10px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 4px 4px 4px 4px;
+    width: fit-content;
+    background: #b11116;
+    background: -moz-linear-gradient(top, #b11116 0%, #af1115 50%, #a10e10 51%, #a20f11 100%);
+    background: -webkit-linear-gradient(top, #b11116 0%,#af1115 50%,#a10e10 51%,#a20f11 100%);
+    background: linear-gradient(to bottom, #b11116 0%,#af1115 50%,#a10e10 51%,#a20f11 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b11116', endColorstr='#a20f11',GradientType=0 );
+}
+
 .box{
     padding: 10px;
+    position: relative;
 }
 
 .bookmarkList,
@@ -624,13 +668,15 @@ ul li {
 
 #bookmarkList li:nth-child(even),
 #notesList li:nth-child(even),
-#highlightList li:nth-child(even){
+#highlightList li:nth-child(even),
+#searchResultList li:nth-child(even){
     background: #f1f1f1;
 }
 
 #bookmarkList li:nth-child(odd),
 #notesList li:nth-child(odd),
-#highlightList li:nth-child(odd){
+#highlightList li:nth-child(odd),
+#searchResultList li:nth-child(odd){
     background: #E8E8E8;
 }
 
@@ -727,11 +773,13 @@ ul li {
 
 #sideBar li {
     cursor: pointer;
+    font-size: 1.4em;
 }
 
 .changeLPI {
-    padding: 10px;
+    padding: 5px 10px;
     cursor: pointer;
+    margin: 0px 10px;
 }
 
 #listLpi li {
@@ -751,7 +799,88 @@ ul li {
     font-size: 0.7em;
     background: url(../img/redTrans.png);
     color: #FFF;
-    width: 80%;
+    width: 90%;
     margin: -22px auto 0;
+    border-left: 3px solid #A21116;
     padding: 5px 20px;
+}
+
+.absRight {
+    position: absolute;
+    top:10px;
+    right: 0px;
+    padding: 10px;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+}
+
+.absRight img {
+    width:100%;
+}
+
+#searchBookmarkOverlay,
+#searchGlobalOverlay {
+    background: url("../img/transBg.png");
+}
+.mainOverlay {
+    margin: 50% auto;
+    width: 80%;
+}
+
+#searchOverlayTitle {
+    color: #FFFFFF;
+}
+
+#schOrlyBtn,
+#schNtsOrlyBtn,
+#schHighOrlyBtn {
+    float: right;
+}
+
+.indent {
+    padding-left:20px;
+}
+
+#lpiLainTitle {
+    color: #BE956D;
+    font-size: 1.4em;
+}
+
+#bookmark,
+#notes,
+#highlights{
+    font-size: 1.6em;
+    padding: 8px 0px 0px;
+}
+
+#globalSearch {
+    background: url(../img/searchIco.png) no-repeat;
+    background-size: 15px;
+    background-position: 96%;
+}
+
+#globalClose {
+    position:absolute;
+    top:0;
+    right:0;
+    padding:10px;
+    color:#FFFFFF;
+    cursor:pointer;
+}
+
+.keyword {
+    font-weight:bold;
+}
+
+#lampiranTable tbody tr {
+    border-bottom: 1px solid #E5E5E5;
+}
+
+#scaleSelectContainer {
+    display: none;
+}
+
+#pdfContainer.keyboard {
+    position: absolute;
 }

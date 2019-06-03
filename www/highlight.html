@@ -1,0 +1,109 @@
+<div id="highlightPage" class="defaultTemp dataPage" data-role="page">
+    <div class="iosHeader"></div>
+    <div id="header" data-role="header">
+        <div id="idxMenu" class="leftHeadIcon">
+            <div id="goToIndex" class="goToIndex">
+                <img src="img/logoBiTop.png" />
+            </div>
+        </div>
+        <div class="headerTitle">
+            <div id="homeHeaderContainer">
+                <div id="highlightTagLine" class="ac goToHome">
+                </div>
+            </div>
+        </div>
+        <div id="menuNav" class="rightHeadIcon">
+            <i class="fa fa-2x fa-bars"></i>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="box">
+            <div id="highlights" class="headerTitle">
+                Saved Search
+            </div>
+            
+            <hr class="smallHr"/>
+            <div id='highSearch' class="absRight">
+                <img src="img/searchIco.png"/>
+            </div>
+        </div>
+        <div class="data-container-high">
+            <ul id="highlightList">
+                
+            </ul>
+        </div>
+        <div id="pagination-container-high"></div>
+    </div>
+
+    <div id="menuContainer" class="overlay transBg top">
+        <div id="menuOverlayHeader">
+            <div id="overlayTitles">LPI <span class="selectedYear"></span></div>
+            <div id="closeOverlay" class="rightHeadIcon">
+                    <i class="fa fa-2x fa-times"></i>
+            </div>
+        </div>
+        <div id="overlayConent">
+            <ul id="sideBar">
+            </ul>
+            <div class="lpiLain">
+                <div id="lpiLainTitle" class="box">LPI lainnya</div>
+                <ul id="listLpi">
+                    
+                </ul>
+            </div>
+            <div id="overlayFooter">
+                <div class="ui-grid-b clearfix ac">
+                    <div id="goToBookmark" class="ui-block-a">
+                        <img src="img/bookmarkIcon.png" />
+                        <div>Bookmark</div>
+                    </div>
+                    <div id="goNotes" class="ui-block-b">
+                        <img src="img/notesIcon.png" />
+                        <div>Notes</div>
+                    </div>
+                    <div id="goHighlight" class="ui-block-c">
+                        <img src="img/highlightIcon.png" />
+                        <div>Saved Search</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box">
+                <input type="text" id="globalSearch" value="" placeholder="Cari Kata Kunci Tersimpan" />
+            </div>
+        </div>
+    </div>
+
+    <div id="searchGlobalOverlay" class="overlay fade">
+        <div class="mainOverlay">
+            <div id="searchOverlayTitle">
+                SEARCH
+            </div>
+            <div id="searchOverlayInput">
+                <form id="formGlobalSearch" onsubmit="return false;">
+                    <input type="text" id="globalOvrly" value="" placeholder="Cari Kata Kunci Tersimpan" />
+                </form>
+            </div>
+            <div id="globalSchOrlyBtn" class="fitBtn">
+                CARI >
+            </div>
+
+            <div id="globalClose"><i class="fa fa-2x fa-times"></i></div>
+        </div>
+    </div>
+
+    <div id="searchBookmarkOverlay" class="overlay fade">
+        <div class="mainOverlay">
+            <div id="searchOverlayTitle">
+                SEARCH
+            </div>
+            <div id="searchOverlayInput">
+                <input type="text" id="schHighOvrly" value="" placeholder="Cari Kata Kunci" />
+            </div>
+            <div id="schHighOrlyBtn" class="fitBtn">
+                CARI >
+            </div>
+        </div>
+    </div>
+</div>
